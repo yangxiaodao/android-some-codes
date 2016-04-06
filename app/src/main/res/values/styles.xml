@@ -4,8 +4,30 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Normal" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@color/normal_bg</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
+
+    <style name="Text" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_hint_size</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Error" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_hint_size</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
 </resources>
