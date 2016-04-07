@@ -6,4 +6,5 @@ package com.xiaodao.util;
 public interface Constants {
 
     String USERNAME = "username";
+    String TITLE = "title";
 }

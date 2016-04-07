@@ -5,4 +5,9 @@
     <string name="login_title">登录</string>
     <string name="login_username_error">用户名错误!</string>
     <string name="login_hint">请输入用户名(最长8位，由数字和字母组成)</string>
+    <string name="image_title">图片系列</string>
+    <string name="image_local">本地图库</string>
+    <string name="image_camera">调用相机</string>
+    <string name="image_weixin">仿微信查看本地图片</string>
+    <string name="image_cut">调用系统裁剪</string>
 </resources>

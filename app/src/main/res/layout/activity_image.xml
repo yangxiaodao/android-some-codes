@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.xiaodao.widget.CircleImageView
+                android:id="@+id/iv_show"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:src="@mipmap/ic_launcher"
+                app:civ_border_color="#FFF"
+                app:civ_border_width="2dp" />
+
+            <Button
+                android:id="@+id/image_local"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_oval"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/image_local"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size" />
+
+            <Button
+                android:id="@+id/image_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_oval"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/image_camera"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size" />
+
+            <Button
+                android:id="@+id/image_cut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_oval"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/image_cut"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size" />
+
+            <Button
+                android:id="@+id/image_weixin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_oval"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/image_weixin"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

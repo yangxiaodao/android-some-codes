@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.xiaodao.fragment.Tab_1_Fragment;
 import com.xiaodao.fragment.Tab_2_Fragment;
 import com.xiaodao.fragment.Tab_3_Fragment;
 import com.xiaodao.log.XLog;
+import com.xiaodao.util.AppUtils;
 import com.xiaodao.util.Constants;
 import com.xiaodao.util.SPUtils;
 
@@ -73,31 +75,29 @@ public class MainActivity extends BaseActivity {
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
 
         mUserAvatar = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.iv_head);
+        mUserAvatar.setOnClickListener(v -> startActivity(new Intent(AppUtils.getContext(),ImageActivity.class)));
         mUserName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.tv_head);
         mUserName.setText(SPUtils.getString(Constants.USERNAME, null));
         mNavigationView.setCheckedItem(R.id.tab_1);
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                mNavigationView.setCheckedItem(item.getItemId());
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
-                mDrawerLayout.closeDrawer(mNavigationView);
-                switch (item.getItemId()) {
-                    case R.id.tab_1:
-                        mViewPager.setCurrentItem(0);
-                        break;
-                    case R.id.tab_2:
-                        mViewPager.setCurrentItem(1);
-                        break;
-                    case R.id.tab_3:
-                        mViewPager.setCurrentItem(2);
-                        break;
-                    case R.id.exit:
-                        exit();
-                        break;
-                }
-                return true;
+        mNavigationView.setNavigationItemSelectedListener(item -> {
+            mNavigationView.setCheckedItem(item.getItemId());
+            Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+            mDrawerLayout.closeDrawer(mNavigationView);
+            switch (item.getItemId()) {
+                case R.id.tab_1:
+                    mViewPager.setCurrentItem(0);
+                    break;
+                case R.id.tab_2:
+                    mViewPager.setCurrentItem(1);
+                    break;
+                case R.id.tab_3:
+                    mViewPager.setCurrentItem(2);
+                    break;
+                case R.id.exit:
+                    exit();
+                    break;
             }
+            return true;
         });
     }
 
