@@ -30,6 +30,9 @@
             android:theme="@style/AppTheme.Normal"></activity>
         <activity
             android:name=".activity.WebViewActivity"></activity>
+        <activity android:name=".activity.ImageWeiXinActivity"/>
+
+        <activity android:name=".activity.ImageFileActivity"/>
     </application>
 
 </manifest>

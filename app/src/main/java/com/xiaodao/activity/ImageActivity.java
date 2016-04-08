@@ -63,6 +63,12 @@ public class ImageActivity extends BaseActivity {
         startActivityForResult(intent, IMAGE_LOCAL);
     }
 
+    @OnClick(R.id.image_weixin)
+    public void imageWeixin(){
+        Intent intent = new Intent(this,ImageWeiXinActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -30,4 +30,22 @@
         <item name="android:textSize">@dimen/text_hint_size</item>
         <item name="android:textColor">@color/colorAccent</item>
     </style>
+    
+    <style name="Button_Normal" parent="Base.TextAppearance.AppCompat.Widget.Button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:background">@drawable/button_oval</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="PopupWindow">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
 </resources>
