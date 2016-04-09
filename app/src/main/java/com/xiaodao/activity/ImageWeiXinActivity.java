@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,7 @@ import com.xiaodao.R;
 import com.xiaodao.base.BaseActivity;
 import com.xiaodao.base.DefaultAdapter;
 import com.xiaodao.bean.ImageData;
+import com.xiaodao.bean.ImageFile;
 import com.xiaodao.log.XLog;
 import com.xiaodao.util.AppUtils;
 
@@ -52,8 +54,8 @@ public class ImageWeiXinActivity extends BaseActivity {
     @Bind(R.id.root)
     LinearLayout mRoot;
 
-    private Map<Integer, ImageData.ImageFileItem> names = new HashMap<>();
-    private Map<Integer, List<ImageData>> imageDataList = new HashMap<>();
+    private Map<Integer, ImageData.ImageFileItem> names;
+    private Map<Integer, List<ImageData>> imageDataList;
 
     private RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
@@ -64,11 +66,16 @@ public class ImageWeiXinActivity extends BaseActivity {
         setContentView(R.layout.activity_image_weixin);
         ButterKnife.bind(this);
         initToolbar(mToolbar, R.string.image_weixin);
+
     }
 
     @OnClick(R.id.image_weixin)
     public void imageWeixin() {
         Observable.create(subscriber -> {
+            if (names!=null){
+                subscriber.onNext(names);
+                return;
+            }
             updateImages();
             Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             Cursor cursor = MediaStore.Images.Media.query(getContentResolver(), uri,
@@ -81,6 +88,8 @@ public class ImageWeiXinActivity extends BaseActivity {
                     }
             );
             if (cursor != null) {
+                names = new HashMap<>();
+                imageDataList = new HashMap<>();
                 while (cursor.moveToNext()) {
                     String imagePath = cursor.getString(0);
                     int id = cursor.getInt(1);
@@ -88,9 +97,9 @@ public class ImageWeiXinActivity extends BaseActivity {
                     String name = cursor.getString(3);
                     if (names.get(bucket_id) == null) {
                         Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(),
-                                id, bucket_id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
-                        names.put(bucket_id, new ImageData.ImageFileItem(name, bitmap));
-                        imageDataList.put(bucket_id, new ArrayList<ImageData>());
+                                id, bucket_id, MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        names.put(bucket_id, new ImageData.ImageFileItem(name, bitmap, bucket_id));
+                        imageDataList.put(bucket_id, new ArrayList<>());
                     }
                     ImageData imageData = new ImageData(imagePath, id, bucket_id);
                     imageDataList.get(bucket_id).add(imageData);
@@ -120,21 +129,23 @@ public class ImageWeiXinActivity extends BaseActivity {
 
 
     private PopupWindow mPopupWindow;
+    List<ImageData.ImageFileItem> list = new ArrayList<>();
 
     private void showList() {
         if (mPopupWindow != null && mPopupWindow.isShowing()) return;
+        if (list.size() == 0) {
+            Set<Map.Entry<Integer, ImageData.ImageFileItem>> entries = names.entrySet();
+            for (Map.Entry<Integer, ImageData.ImageFileItem> entry : entries) {
+                list.add(entry.getValue());
+            }
+        }
         View view = View.inflate(this, R.layout.popup_image, null);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
-        List<ImageData.ImageFileItem> list = new ArrayList<>();
-        Set<Map.Entry<Integer, ImageData.ImageFileItem>> entries = names.entrySet();
-        for (Map.Entry<Integer, ImageData.ImageFileItem> entry : entries) {
-            list.add(entry.getValue());
-        }
-        mAdapter = new ImageAdapter(list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new ImageAdapter(list);
         mRecyclerView.setAdapter(mAdapter);
         mPopupWindow = new PopupWindow(view, WindowManager.LayoutParams.MATCH_PARENT,
                 (int) (getResources().getDisplayMetrics().heightPixels * 0.6));
@@ -179,10 +190,26 @@ public class ImageWeiXinActivity extends BaseActivity {
             holder.path.setText("文件夹：" + item.imagePath);
             holder.count.setText("数量：" + item.imageCount);
             holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(AppUtils.getContext(),ImageFileActivity.class);
-                startActivity(intent);
+                List<ImageData> imageDatas = imageDataList.get(item.imagePartentId);
+                ImageFile imageFile = new ImageFile(imageDatas);
+                Intent intent = new Intent(AppUtils.getContext(), ImageFileActivity.class);
+                intent.putExtra("imageFile", imageFile);
+                startActivityForResult(intent,1);
+                if (mPopupWindow != null && mPopupWindow.isShowing()) {
+                    mPopupWindow.dismiss();
+                }
             });
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ImageFile imageFile = (ImageFile) data.getSerializableExtra("imageFile");
+        List<ImageData> list = imageFile.list;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(list.toString());
+        builder.show();
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {

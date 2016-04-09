@@ -33,6 +33,9 @@
         <activity android:name=".activity.ImageWeiXinActivity"/>
 
         <activity android:name=".activity.ImageFileActivity"/>
+
+        <activity android:name=".activity.AnimationsActivity"/>
+        <activity android:name=".activity.ToolbarAnimationActivity"/>
     </application>
 
 </manifest>

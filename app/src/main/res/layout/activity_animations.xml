@@ -12,13 +12,12 @@
         android:background="@color/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:theme="@style/AppTheme.AppBarOverlay"></android.support.v7.widget.Toolbar>
+        app:theme="@style/AppTheme.AppBarOverlay">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
-        android:layout_marginLeft="12dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    </android.support.v7.widget.Toolbar>
 
-    </android.support.v7.widget.RecyclerView>
+    <Button
+        android:id="@+id/material_design"
+        style="@style/Button_Normal"
+        android:text="Material Design Toolbar" />
 </LinearLayout>

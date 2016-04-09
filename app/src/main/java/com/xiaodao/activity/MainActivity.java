@@ -1,7 +1,6 @@
 package com.xiaodao.activity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -12,8 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +21,6 @@ import com.xiaodao.base.BaseActivity;
 import com.xiaodao.fragment.Tab_1_Fragment;
 import com.xiaodao.fragment.Tab_2_Fragment;
 import com.xiaodao.fragment.Tab_3_Fragment;
-import com.xiaodao.log.XLog;
 import com.xiaodao.util.AppUtils;
 import com.xiaodao.util.Constants;
 import com.xiaodao.util.SPUtils;
@@ -64,18 +61,18 @@ public class MainActivity extends BaseActivity {
         initToolbar();
         initDrawer();
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             initFragment();
         }
     }
 
     private void initDrawer() {
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close);
         actionBarDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
 
         mUserAvatar = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.iv_head);
-        mUserAvatar.setOnClickListener(v -> startActivity(new Intent(AppUtils.getContext(),ImageActivity.class)));
+        mUserAvatar.setOnClickListener(v -> startActivity(new Intent(AppUtils.getContext(), ImageActivity.class)));
         mUserName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.tv_head);
         mUserName.setText(SPUtils.getString(Constants.USERNAME, null));
         mNavigationView.setCheckedItem(R.id.tab_1);
@@ -96,6 +93,9 @@ public class MainActivity extends BaseActivity {
                 case R.id.exit:
                     exit();
                     break;
+                case R.id.tab_5:
+                    startActivity(new Intent(AppUtils.getContext(),AnimationsActivity.class));
+                    break;
             }
             return true;
         });
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity {
 
     private void exit() {
         SPUtils.remove(Constants.USERNAME);
-        startActivity(new Intent(this,LoginActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     private void initToolbar() {
@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity {
         mFragments.add(new Tab_2_Fragment());
         mFragments.add(new Tab_3_Fragment());
 
-        mAdapter = new HomeAdapter(getSupportFragmentManager(),mTitles,mFragments);
+        mAdapter = new HomeAdapter(getSupportFragmentManager(), mTitles, mFragments);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         mNavigationView.setCheckedItem(R.id.tab_1);
                         break;
@@ -150,12 +150,12 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private class HomeAdapter extends FragmentPagerAdapter{
+    private class HomeAdapter extends FragmentPagerAdapter {
 
         private List<String> titles;
         private List<Fragment> fragments;
 
-        public HomeAdapter(FragmentManager fm,List<String> titles,List<Fragment> fragments) {
+        public HomeAdapter(FragmentManager fm, List<String> titles, List<Fragment> fragments) {
             super(fm);
             this.titles = titles;
             this.fragments = fragments;
@@ -175,5 +175,14 @@ public class MainActivity extends BaseActivity {
         public int getCount() {
             return fragments.size();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && mDrawerLayout.isDrawerOpen(mNavigationView)) {
+            mDrawerLayout.closeDrawer(mNavigationView);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

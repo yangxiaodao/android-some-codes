@@ -1,6 +1,7 @@
 package com.xiaodao.util;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 
 import com.xiaodao.base.BaseApplication;
 
@@ -23,5 +24,11 @@ public class AppUtils {
      */
     public static boolean isRunOnUiThread(){
         return Thread.currentThread() == BaseApplication.mThread;
+    }
+
+    public static int dp2px(int dp){
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        float density = displayMetrics.density;
+        return (int) (dp*density + 0.5f);
     }
 }
