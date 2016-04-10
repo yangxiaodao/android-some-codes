@@ -15,4 +15,4 @@
 
 ### 动画篇
 
-*    Material Desigin的Toolbar的动画效果。
+*    Material Design 的Toolbar的动画效果。

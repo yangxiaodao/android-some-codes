@@ -1,6 +1,7 @@
 package com.xiaodao.activity;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,6 +63,34 @@ public class ImageFileActivity extends BaseActivity {
         mRecyclerView.setAdapter(imageAdapter);
         mImageManager = new ImageManager();
 
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration());
+    }
+
+    /**
+     * 设置每个item之间的间距，让每个图片的width=height。
+     */
+    private class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int space = AppUtils.dp2px(12);
+            int w = getResources().getDisplayMetrics().widthPixels;
+            int image_w = (w - AppUtils.dp2px(12) * 4) / 3;
+            if (parent.getChildLayoutPosition(view) % 3 == 0) {
+                outRect.left = space;
+                outRect.right = space / 2;
+            } else if (parent.getChildLayoutPosition(view) % 3 == 1) {
+                outRect.right = outRect.left = space / 2;
+            } else {
+                outRect.left = space / 2;
+                outRect.right = space;
+            }
+            outRect.bottom = space;
+            if (parent.getChildLayoutPosition(view) == 0) outRect.top = space;
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) view.getLayoutParams();
+            layoutParams.height = image_w;
+            view.setLayoutParams(layoutParams);
+        }
     }
 
     private class ImageAdapter extends DefaultAdapter<ImageData, ImageViewHolder> {
@@ -80,37 +109,30 @@ public class ImageFileActivity extends BaseActivity {
         public void onBindViewHolder(ImageViewHolder holder, int position) {
             ImageData imageData = list.get(position);
             View itemView = holder.itemView;
-            int w = getResources().getDisplayMetrics().widthPixels - AppUtils.dp2px(12);
-            int image_w = (w - AppUtils.dp2px(12) * 3) / 3;
-            RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(
-                    image_w, image_w
-            );
-            layoutParams.topMargin = AppUtils.dp2px(12);
-            itemView.setLayoutParams(layoutParams);
 
             Glide.with(AppUtils.getContext()).load(imageData.imagePath).placeholder(
                     R.mipmap.ic_image_black_48dp
             ).skipMemoryCache(true).into(holder.show);
 //            Bitmap bitmap = mImageManager.getBitmap(imageData.imageId, imageData.imagePartentId);
 //            holder.show.setImageBitmap(bitmap);
-            if (imageData.isSelect){
+            if (imageData.isSelect) {
                 holder.status.setImageResource(R.mipmap.ic_check_box_black_24dp);
-            }else {
+            } else {
                 holder.status.setImageResource(R.mipmap.ic_check_box_outline_blank_black_24dp);
             }
 
             itemView.setOnClickListener(v -> {
-                if (imageData.isSelect){
+                if (imageData.isSelect) {
                     selectImages.remove(imageData);
                     imageData.isSelect = false;
                     holder.status.setImageResource(R.mipmap.ic_check_box_outline_blank_black_24dp);
-                }else {
+                } else {
                     selectImages.add(imageData);
                     imageData.isSelect = true;
                     holder.status.setImageResource(R.mipmap.ic_check_box_black_24dp);
                 }
                 MenuItem menuItem = mToolbar.getMenu().getItem(0);
-                menuItem.setTitle("已选择图片数量："+ selectImages.size() + "张");
+                menuItem.setTitle("已选择图片数量：" + selectImages.size() + "张");
             });
         }
     }
@@ -124,30 +146,30 @@ public class ImageFileActivity extends BaseActivity {
 
         public ImageViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 
-    protected void initToolbar(Toolbar mToolbar,int resId) {
+    protected void initToolbar(Toolbar mToolbar, int resId) {
         mToolbar.setTitle(resId);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationOnClickListener(v -> {
             Intent intent = new Intent();
             ImageFile imageFile = new ImageFile(selectImages);
-            intent.putExtra("imageFile",imageFile);
-            setResult(1,intent);
+            intent.putExtra("imageFile", imageFile);
+            setResult(1, intent);
             finish();
         });
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN){
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
             Intent intent = new Intent();
             ImageFile imageFile = new ImageFile(selectImages);
-            intent.putExtra("imageFile",imageFile);
-            setResult(1,intent);
+            intent.putExtra("imageFile", imageFile);
+            setResult(1, intent);
             finish();
             return true;
         }
@@ -156,7 +178,7 @@ public class ImageFileActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.iamge_select_menu,menu);
+        getMenuInflater().inflate(R.menu.iamge_select_menu, menu);
         return true;
     }
 }
